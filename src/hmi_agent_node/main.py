@@ -56,6 +56,7 @@ def joystick_callback(msg: Joystick_Status):
     global drivetrain_orientation
     global is_auto
     global hmi_pub
+    global odom_pub
     global drive_joystick
     global arm_joystick
     global bb1_joystick
