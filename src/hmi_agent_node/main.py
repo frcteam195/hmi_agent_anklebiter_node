@@ -44,7 +44,7 @@ bb2_joystick = Joystick(3)
 
 is_auto = False
 
-drivetrain_orientation = HMI_Signals.ROBOT_ORIENTED
+drivetrain_orientation = HMI_Signals.FIELD_ORIENTED
 
 
 def robot_status_callback(msg: Robot_Status):
@@ -98,19 +98,16 @@ def joystick_callback(msg: Joystick_Status):
     hmi_update_msg.drivetrain_swerve_percent_fwd_vel = limit(r, 0.0, 1.0)
     hmi_update_msg.drivetrain_swerve_percent_angular_rot = z
 
-    intake_control = Intake_Control()
 
     if drive_joystick.getButton(drive_params.robot_orient_button_id):
-        # drivetrain_orientation = HMI_Signals.ROBOT_ORIENTED
-        intake_control.rollers_intake = True
-        intake_control.rollers_outake = False
+        drivetrain_orientation = HMI_Signals.ROBOT_ORIENTED
     elif drive_joystick.getButton(drive_params.field_orient_button_id):
-        intake_control.rollers_intake = False 
-        intake_control.rollers_outake = True 
-    
+        drivetrain_orientation = HMI_Signals.FIELD_ORIENTED
+
+
+    intake_control = Intake_Control()
     intake_pub.publish(intake_control)
-    
-        # drivetrain_orientation = HMI_Signals.FIELD_ORIENTED
+
 
     hmi_update_msg.drivetrain_orientation = drivetrain_orientation
 
