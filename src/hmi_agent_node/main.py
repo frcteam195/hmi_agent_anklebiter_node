@@ -119,21 +119,9 @@ def joystick_callback(msg: Joystick_Status):
         odom.header.frame_id = 'odom'
         odom.child_frame_id = 'base_link'
 
-        odom.pose.pose.orientation.w = 1
-        odom.pose.pose.orientation.x = 0
-        odom.pose.pose.orientation.y = 0
-        odom.pose.pose.orientation.z = 0
-        odom.pose.pose.position.x = 0
-        odom.pose.pose.position.y = 0
-        odom.pose.pose.position.z = 0
+        odom.pose.pose = Pose().to_msg()
 
-        odom.twist.twist.linear.x = 0
-        odom.twist.twist.linear.y = 0
-        odom.twist.twist.linear.z = 0
-
-        odom.twist.twist.angular.x = 0
-        odom.twist.twist.angular.y = 0
-        odom.twist.twist.angular.z = 0
+        odom.twist.twist = Twist.to_msg()
 
         pose_covariance = Covariance()
         pose_covariance.x_var(0.001)
