@@ -8,6 +8,7 @@ from ck_utilities_py_node.joystick import Joystick
 from ck_utilities_py_node.ckmath import *
 from ck_ros_msgs_node.msg import Intake_Control
 from nav_msgs.msg._Odometry import Odometry
+from ck_utilities_py_node.geometry import *
 import numpy as np
 
 
@@ -134,83 +135,16 @@ def joystick_callback(msg: Joystick_Status):
         odom.twist.twist.angular.y = 0
         odom.twist.twist.angular.z = 0
 
-        odom.pose.covariance = [
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.00001,
-        ]
+        pose_covariance = Covariance()
+        pose_covariance.x_var(0.001)
+        pose_covariance.y_var(0.001)
+        pose_covariance.z_var(0.001)
+        pose_covariance.yaw_var(0.001)
+        pose_covariance.pitch_var(0.001)
+        pose_covariance.roll_var(0.001)
 
-        odom.twist.covariance =[
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.001,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.001,
-        ]
+        odom.pose.covariance = pose_covariance.to_msg()
+        odom.twist.covariance = Covariance().to_msg()
 
         odom_pub.publish(odom)
 
