@@ -7,8 +7,8 @@ from ck_ros_msgs_node.msg import HMI_Signals
 from ck_utilities_py_node.joystick import Joystick
 from ck_utilities_py_node.ckmath import *
 from ck_ros_msgs_node.msg import Intake_Control
-from nav_msgs.msg._Odometry import Odometry
-from ck_utilities_py_node.geometry import *
+from nav_msgs.msg import *
+from ck_utilities_py_node import geometry
 import numpy as np
 
 
@@ -103,7 +103,7 @@ def joystick_callback(msg: Joystick_Status):
     if drive_joystick.getButton(drive_params.robot_orient_button_id):
         drivetrain_orientation = HMI_Signals.ROBOT_ORIENTED
     elif drive_joystick.getButton(drive_params.field_orient_button_id):
-        drivetrain_orientation = HMI_Signals.FIELD_ORIENTED
+        drivetrain_orientation = HMI_Signals.FIELD_CENTRIC
 
 
     intake_control = Intake_Control()
@@ -113,26 +113,26 @@ def joystick_callback(msg: Joystick_Status):
     hmi_update_msg.drivetrain_orientation = drivetrain_orientation
 
     if drive_joystick.getButton(drive_params.reset_odometry_button_id):
-        odom = Odometry()
+        odom = nav_msgs.msg._Odometry.Odometry()
 
         odom.header.stamp = rospy.Time.now()
         odom.header.frame_id = 'odom'
         odom.child_frame_id = 'base_link'
 
-        odom.pose.pose = Pose().to_msg()
+        odom.pose.pose = geometry.Pose().to_msg()
 
-        odom.twist.twist = Twist.to_msg()
+        odom.twist.twist = geometry.Twist().to_msg()
 
-        pose_covariance = Covariance()
-        pose_covariance.x_var(0.001)
-        pose_covariance.y_var(0.001)
-        pose_covariance.z_var(0.001)
-        pose_covariance.yaw_var(0.001)
-        pose_covariance.pitch_var(0.001)
-        pose_covariance.roll_var(0.001)
+        pose_covariance = geometry.Covariance()
+        pose_covariance.x_var = 0.001
+        pose_covariance.y_var = 0.001
+        pose_covariance.z_var = 0.001
+        pose_covariance.yaw_var = 0.001
+        pose_covariance.pitch_var = 0.001
+        pose_covariance.roll_var = 0.001
 
         odom.pose.covariance = pose_covariance.to_msg()
-        odom.twist.covariance = Covariance().to_msg()
+        odom.twist.covariance = geometry.Covariance().to_msg()
 
         odom_pub.publish(odom)
 
