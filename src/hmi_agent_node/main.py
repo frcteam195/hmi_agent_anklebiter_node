@@ -45,7 +45,7 @@ bb2_joystick = Joystick(3)
 
 is_auto = False
 
-drivetrain_orientation = HMI_Signals.FIELD_ORIENTED
+drivetrain_orientation = HMI_Signals.FIELD_CENTRIC
 
 
 def robot_status_callback(msg: Robot_Status):
